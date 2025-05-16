@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 import Header from "./Header";
 import Title from "../shared/Title";
-import MenuIcon from "@mui/icons-material/Menu";
+import ChatList from "../specific/ChatList";
 
 const AppLayout =
   () =>
@@ -13,7 +13,7 @@ const AppLayout =
           <Header />
           <div className="flex ">
             <div className="bg-red-600 w-1/4 h-screen sm:block hidden">
-              First
+              <ChatList/>
             </div>
             <div className="bg-yellow-600  h-screen flex-1">
               <WrappedComponent {...props} />
@@ -21,7 +21,7 @@ const AppLayout =
             <div className="bg-green-600 w-1/4 h-screen md:block hidden">
               THird
             </div>
-            {<button className="md:hidden block">{<MenuIcon />}</button>}
+          
           </div>
         </div>
       );
