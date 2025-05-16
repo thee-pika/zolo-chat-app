@@ -1,8 +1,10 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { useInputValidation } from "6pp";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupForm() {
+  const navigate = useNavigate();
   const name = useInputValidation("");
   const bio = useInputValidation("");
   const username = useInputValidation("");
@@ -108,9 +110,17 @@ export default function SignupForm() {
             Sign Up
           </button>
           <div className="flex flex-col items-center">
-          <span className="p-4">OR</span>
-          <h4 className=" text-sm p-4">Already have an Account? <span className="hover:underline bg-amber-100 px-4 py-2 pl-4">LOGIN INSTEAD</span></h4>
-            </div>
+            <span className="p-4">OR</span>
+            <h4 className=" text-sm p-4">
+              Already have an Account?{" "}
+              <span
+                className="hover:underline bg-amber-100 px-4 py-2 pl-4"
+                onClick={() => navigate("/login")}
+              >
+                LOGIN INSTEAD
+              </span>
+            </h4>
+          </div>
         </form>
       </div>
     </div>

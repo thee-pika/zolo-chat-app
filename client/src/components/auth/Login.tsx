@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
+    const navigate = useNavigate();
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white shadow-md rounded-2xl">
@@ -46,7 +49,7 @@ const Login = () => {
             <span className="p-4">OR</span>
             <h4 className=" text-sm p-4">
               Don't have an account?{" "}
-              <span className="hover:underline bg-amber-100 px-4 py-2 pl-4">
+              <span className="hover:underline bg-amber-100 px-4 py-2 pl-4"    onClick={() => navigate("/signup")}>
                 Sign UP
               </span>
             </h4>
