@@ -23,25 +23,43 @@ model User {
 }
 
 model Chat {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   groupChat Boolean
   creator   String?
   members   String[]
   chatName  String?
   avatar    String?
+  messages  Message[]
 }
 
 model Message {
-  id          String   @id @default(uuid())
+  id          String       @id @default(uuid())
   sender      String
   content     String
-  receiver    String
-  attachments String[]
+  chatId      String
+  chat        Chat         @relation(fields: [chatId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  attachments Attachment[]
+}
+
+model Attachment {
+  id        String  @id @default(uuid())
+  public_id String
+  url       String
+  messageId String
+  message   Message @relation(fields: [messageId], references: [id])
 }
 
 model Request {
-  id         String  @id @default(uuid())
+  id         String @id @default(uuid())
   senderId   String
   receiverId String
-  status     Boolean
+  status     Status @default(PENDING)
+}
+
+enum Status {
+  PENDING
+  ACCEPTED
+  REJECTED
 }

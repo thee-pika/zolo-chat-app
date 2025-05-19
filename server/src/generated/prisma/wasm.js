@@ -141,8 +141,16 @@ exports.Prisma.MessageScalarFieldEnum = {
   id: 'id',
   sender: 'sender',
   content: 'content',
-  receiver: 'receiver',
-  attachments: 'attachments'
+  chatId: 'chatId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AttachmentScalarFieldEnum = {
+  id: 'id',
+  public_id: 'public_id',
+  url: 'url',
+  messageId: 'messageId'
 };
 
 exports.Prisma.RequestScalarFieldEnum = {
@@ -166,12 +174,17 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.Status = exports.$Enums.Status = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Chat: 'Chat',
   Message: 'Message',
+  Attachment: 'Attachment',
   Request: 'Request'
 };
 
