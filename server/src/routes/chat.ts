@@ -15,7 +15,7 @@ import {
   sendAttachments,
   updateGroupChats,
 } from "../controller/chat";
-import { isAuthenticted } from "../middleware/AuthMiddleware";
+import { isAuthenticted } from "../middleware/auth";
 import { attachmentsMulter } from "../middleware/multer";
 
 export const chatRouter = express.Router();

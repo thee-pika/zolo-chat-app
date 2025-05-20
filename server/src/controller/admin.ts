@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../../db";
 import { cookieOptions } from "../utils/feature";
+import { createAdminToken } from "../utils/createToken";
 
 const GetRequestHandler = (req: Request, res: Response) => {
   res.status(200).json({ message: "Get request successful" });
@@ -136,19 +137,37 @@ const adminVerifyHanlder = async (req: Request, res: Response) => {
   }
 
   const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY;
+
   if (!ADMIN_SECRET_KEY) {
     res.status(500).json({ message: "Admin secret key not set" });
     return;
   }
+
   if (secretKey !== ADMIN_SECRET_KEY) {
     res.status(401).json({ message: "Invalid secret key" });
     return;
   }
 
-  const token = "admin"; // just for now 
+  const token = createAdminToken(true);
+
+  if (!token) {
+    res.status(500).json({ message: "Token generation failed" });
+    return;
+  }
+
   res
     .status(200)
     .cookie("admin", token, { ...cookieOptions, maxAge: 1000 * 60 * 15 });
+};
+
+const adminLogoutHandler = async (req: Request, res: Response) => {
+  res
+    .status(200)
+    .cookie("admin", "", { ...cookieOptions, maxAge: 0 })
+    .json({
+      success: true,
+      message: "Logout successful",
+    });
 };
 
 const statsHandler = async (req: Request, res: Response) => {
@@ -215,4 +234,5 @@ export {
   getAllChatsHandler,
   adminVerifyHanlder,
   statsHandler,
+  adminLogoutHandler,
 };

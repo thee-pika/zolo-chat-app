@@ -366,7 +366,12 @@ const sendAttachments = TryCatch(
       return;
     }
 
-    const attachments = [];
+    const attachments = [
+      {
+        public_id: "",
+        url: "",
+      },
+    ];
 
     const messageForRealTime = {
       content: "",
@@ -388,9 +393,9 @@ const sendAttachments = TryCatch(
 
     const message = await prisma.message.create({
       data: {
-        sender: messageForDB.senderId,
+        senderId: messageForDB.senderId,
         content: messageForDB.content,
-        attachments: messageForDB.attachments,
+        attachments: { create: messageForDB.attachments },
         chatId: messageForDB.chatId,
       },
     });

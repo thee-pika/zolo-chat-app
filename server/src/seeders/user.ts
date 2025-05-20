@@ -54,7 +54,7 @@ const createSingleChats = async (count: number) => {
   }
 };
 
-const craeteGroupChats = async (numChats: number) => {
+const createMessagesInAGroup = async (numChats: number) => {
   try {
     const users = await prisma.user.findMany({
       select: {
@@ -68,24 +68,63 @@ const craeteGroupChats = async (numChats: number) => {
       const numMembers = simpleFaker.number.int({ min: 3, max: users.length });
       const members = [];
 
-      for (let i = 0; i < numMembers.length; i++) {
-        const randomIdx = Math.floor(Math.random() * users.length);
-        const randomUser = users[randomIdx];
-        const chat = prisma.chat.create({
-          data: {
-            creator: members[0],
-          },
-        });
+      const randomIdx = Math.floor(Math.random() * users.length);
 
-        chatsPromise.push(chat);
-      }
+      const randomUser = users[randomIdx];
 
-      await Promise.all(chatsPromise);
+      members.push(randomUser.id);
+
+      const chat = prisma.chat.create({
+        data: {
+          chatName: faker.lorem.words(2),
+          members: members,
+          groupChat: true,
+          avatar: faker.image.avatar(),
+          creator: randomUser.id,
+        },
+      });
+
+      chatsPromise.push(chat);
     }
+
+    await Promise.all(chatsPromise);
   } catch (error) {
     console.log(error);
   }
 };
+
+// const createGroupChats = async (numChats: number) => {
+//   try {
+//     const users = await prisma.user.findMany({
+//       select: {
+//         id: true,
+//       },
+//     });
+
+//     const chatsPromise = [];
+
+//     for (let i = 0; i < numChats; i++) {
+//       const numMembers = simpleFaker.number.int({ min: 3, max: users.length });
+//       const members = [];
+
+//       for (let i = 0; i < numMembers; i++) {
+//         const randomIdx = Math.floor(Math.random() * users.length);
+//         const randomUser = users[randomIdx];
+//         const chat = prisma.chat.create({
+//           data: {
+//             creator: members[0],
+//           },
+//         });
+
+//         chatsPromise.push(chat);
+//       }
+
+//       await Promise.all(chatsPromise);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 const createMessages = async (numMessages: number) => {
   try {
@@ -112,7 +151,7 @@ const createMessages = async (numMessages: number) => {
         prisma.message.create({
           data: {
             content: faker.lorem.sentence(),
-            sender: randomUser.id,
+            senderId: randomUser.id,
             chatId: randomChat.id,
           },
         })
@@ -123,7 +162,7 @@ const createMessages = async (numMessages: number) => {
   }
 };
 
-const createMessagesInAChat = async (chatId, numMessages) => {
+const createMessagesInAChat = async (chatId: string, numMessages: number) => {
   try {
     const users = await prisma.user.findMany({
       select: {
@@ -139,7 +178,7 @@ const createMessagesInAChat = async (chatId, numMessages) => {
         prisma.message.create({
           data: {
             chatId,
-            sender: randomUser.id,
+            senderId: randomUser.id,
             content: faker.lorem.sentence(),
           },
         })
@@ -151,3 +190,5 @@ const createMessagesInAChat = async (chatId, numMessages) => {
     console.log(error);
   }
 };
+
+export {createMessagesInAChat, createMessages, createUser, createSingleChats, createMessagesInAGroup};

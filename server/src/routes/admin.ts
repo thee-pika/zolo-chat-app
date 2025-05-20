@@ -6,6 +6,7 @@ import {
   GetAllUsersHandler,
   GetRequestHandler,
   statsHandler,
+  adminLogoutHandler
 } from "../controller/admin";
 import { logoutHandler } from "../controller/user";
 
@@ -24,3 +25,5 @@ adminRouter.get("/logout", logoutHandler);
 adminRouter.get("/messages", getAllMessagesHandler);
 
 adminRouter.get("/stats", statsHandler);
+
+adminRouter.get("/logout", adminLogoutHandler);

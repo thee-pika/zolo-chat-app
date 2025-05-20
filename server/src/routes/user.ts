@@ -1,6 +1,6 @@
 import express from "express";
 import { loginHandler, signUpHandler, userDetails } from "../controller/user";
-import { isAuthenticted } from "../middleware/AuthMiddleware";
+import { isAuthenticted } from "../middleware/auth";
 
 export const userRouter = express();
 

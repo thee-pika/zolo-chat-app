@@ -14,7 +14,6 @@ import { ErrorHandler } from "../utils/utility";
 import { TryCatch } from "../middleware/error";
 import { cookieOptions, emitEvent } from "../utils/feature";
 import { NEW_REQUEST, REFETCH_CHATS } from "../utils/event";
-import { getOtherMember } from "../lib/helper";
 
 const signUpHandler = TryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
