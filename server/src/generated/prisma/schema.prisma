@@ -15,11 +15,13 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  name     String
-  password String
-  avatar   String
-  bio      String
+  id               String    @id @default(uuid())
+  name             String
+  password         String
+  avatar           String
+  bio              String
+  sentRequests     Request[] @relation("Sender")
+  receivedRequests Request[] @relation("Receiver")
 }
 
 model Chat {
@@ -34,7 +36,7 @@ model Chat {
 
 model Message {
   id          String       @id @default(uuid())
-  sender      String
+  senderId    String
   content     String
   chatId      String
   chat        Chat         @relation(fields: [chatId], references: [id])
@@ -52,10 +54,14 @@ model Attachment {
 }
 
 model Request {
-  id         String @id @default(uuid())
+  id         String   @id @default(uuid())
   senderId   String
   receiverId String
-  status     Status @default(PENDING)
+  sender     User     @relation("Sender", fields: [senderId], references: [id])
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  status     Status   @default(PENDING)
 }
 
 enum Status {

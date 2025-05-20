@@ -1247,6 +1247,46 @@ export namespace Prisma {
 
 
   /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    sentRequests: number
+    receivedRequests: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sentRequests?: boolean | UserCountOutputTypeCountSentRequestsArgs
+    receivedRequests?: boolean | UserCountOutputTypeCountReceivedRequestsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSentRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RequestWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReceivedRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RequestWhereInput
+  }
+
+
+  /**
    * Count Type ChatCountOutputType
    */
 
@@ -1476,6 +1516,9 @@ export namespace Prisma {
     password?: boolean
     avatar?: boolean
     bio?: boolean
+    sentRequests?: boolean | User$sentRequestsArgs<ExtArgs>
+    receivedRequests?: boolean | User$receivedRequestsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1503,10 +1546,20 @@ export namespace Prisma {
   }
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "password" | "avatar" | "bio", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sentRequests?: boolean | User$sentRequestsArgs<ExtArgs>
+    receivedRequests?: boolean | User$receivedRequestsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      sentRequests: Prisma.$RequestPayload<ExtArgs>[]
+      receivedRequests: Prisma.$RequestPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
@@ -1907,6 +1960,8 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    sentRequests<T extends User$sentRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$sentRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    receivedRequests<T extends User$receivedRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1958,6 +2013,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1976,6 +2035,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1993,6 +2056,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -2042,6 +2109,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -2090,6 +2161,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -2132,6 +2207,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -2180,6 +2259,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -2247,6 +2330,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -2273,6 +2360,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -2293,6 +2384,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.sentRequests
+   */
+  export type User$sentRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Request
+     */
+    select?: RequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Request
+     */
+    omit?: RequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
+    where?: RequestWhereInput
+    orderBy?: RequestOrderByWithRelationInput | RequestOrderByWithRelationInput[]
+    cursor?: RequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RequestScalarFieldEnum | RequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.receivedRequests
+   */
+  export type User$receivedRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Request
+     */
+    select?: RequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Request
+     */
+    omit?: RequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
+    where?: RequestWhereInput
+    orderBy?: RequestOrderByWithRelationInput | RequestOrderByWithRelationInput[]
+    cursor?: RequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RequestScalarFieldEnum | RequestScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2304,6 +2443,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -3398,7 +3541,7 @@ export namespace Prisma {
 
   export type MessageMinAggregateOutputType = {
     id: string | null
-    sender: string | null
+    senderId: string | null
     content: string | null
     chatId: string | null
     createdAt: Date | null
@@ -3407,7 +3550,7 @@ export namespace Prisma {
 
   export type MessageMaxAggregateOutputType = {
     id: string | null
-    sender: string | null
+    senderId: string | null
     content: string | null
     chatId: string | null
     createdAt: Date | null
@@ -3416,7 +3559,7 @@ export namespace Prisma {
 
   export type MessageCountAggregateOutputType = {
     id: number
-    sender: number
+    senderId: number
     content: number
     chatId: number
     createdAt: number
@@ -3427,7 +3570,7 @@ export namespace Prisma {
 
   export type MessageMinAggregateInputType = {
     id?: true
-    sender?: true
+    senderId?: true
     content?: true
     chatId?: true
     createdAt?: true
@@ -3436,7 +3579,7 @@ export namespace Prisma {
 
   export type MessageMaxAggregateInputType = {
     id?: true
-    sender?: true
+    senderId?: true
     content?: true
     chatId?: true
     createdAt?: true
@@ -3445,7 +3588,7 @@ export namespace Prisma {
 
   export type MessageCountAggregateInputType = {
     id?: true
-    sender?: true
+    senderId?: true
     content?: true
     chatId?: true
     createdAt?: true
@@ -3527,7 +3670,7 @@ export namespace Prisma {
 
   export type MessageGroupByOutputType = {
     id: string
-    sender: string
+    senderId: string
     content: string
     chatId: string
     createdAt: Date
@@ -3553,7 +3696,7 @@ export namespace Prisma {
 
   export type MessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    sender?: boolean
+    senderId?: boolean
     content?: boolean
     chatId?: boolean
     createdAt?: boolean
@@ -3565,7 +3708,7 @@ export namespace Prisma {
 
   export type MessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    sender?: boolean
+    senderId?: boolean
     content?: boolean
     chatId?: boolean
     createdAt?: boolean
@@ -3575,7 +3718,7 @@ export namespace Prisma {
 
   export type MessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    sender?: boolean
+    senderId?: boolean
     content?: boolean
     chatId?: boolean
     createdAt?: boolean
@@ -3585,14 +3728,14 @@ export namespace Prisma {
 
   export type MessageSelectScalar = {
     id?: boolean
-    sender?: boolean
+    senderId?: boolean
     content?: boolean
     chatId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sender" | "content" | "chatId" | "createdAt" | "updatedAt", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "senderId" | "content" | "chatId" | "createdAt" | "updatedAt", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chat?: boolean | ChatDefaultArgs<ExtArgs>
     attachments?: boolean | Message$attachmentsArgs<ExtArgs>
@@ -3613,7 +3756,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      sender: string
+      senderId: string
       content: string
       chatId: string
       createdAt: Date
@@ -4044,7 +4187,7 @@ export namespace Prisma {
    */
   interface MessageFieldRefs {
     readonly id: FieldRef<"Message", 'String'>
-    readonly sender: FieldRef<"Message", 'String'>
+    readonly senderId: FieldRef<"Message", 'String'>
     readonly content: FieldRef<"Message", 'String'>
     readonly chatId: FieldRef<"Message", 'String'>
     readonly createdAt: FieldRef<"Message", 'DateTime'>
@@ -5546,6 +5689,8 @@ export namespace Prisma {
     id: string | null
     senderId: string | null
     receiverId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
     status: $Enums.Status | null
   }
 
@@ -5553,6 +5698,8 @@ export namespace Prisma {
     id: string | null
     senderId: string | null
     receiverId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
     status: $Enums.Status | null
   }
 
@@ -5560,6 +5707,8 @@ export namespace Prisma {
     id: number
     senderId: number
     receiverId: number
+    createdAt: number
+    updatedAt: number
     status: number
     _all: number
   }
@@ -5569,6 +5718,8 @@ export namespace Prisma {
     id?: true
     senderId?: true
     receiverId?: true
+    createdAt?: true
+    updatedAt?: true
     status?: true
   }
 
@@ -5576,6 +5727,8 @@ export namespace Prisma {
     id?: true
     senderId?: true
     receiverId?: true
+    createdAt?: true
+    updatedAt?: true
     status?: true
   }
 
@@ -5583,6 +5736,8 @@ export namespace Prisma {
     id?: true
     senderId?: true
     receiverId?: true
+    createdAt?: true
+    updatedAt?: true
     status?: true
     _all?: true
   }
@@ -5663,6 +5818,8 @@ export namespace Prisma {
     id: string
     senderId: string
     receiverId: string
+    createdAt: Date
+    updatedAt: Date
     status: $Enums.Status
     _count: RequestCountAggregateOutputType | null
     _min: RequestMinAggregateOutputType | null
@@ -5687,39 +5844,70 @@ export namespace Prisma {
     id?: boolean
     senderId?: boolean
     receiverId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     status?: boolean
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+    receiver?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["request"]>
 
   export type RequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     senderId?: boolean
     receiverId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     status?: boolean
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+    receiver?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["request"]>
 
   export type RequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     senderId?: boolean
     receiverId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     status?: boolean
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+    receiver?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["request"]>
 
   export type RequestSelectScalar = {
     id?: boolean
     senderId?: boolean
     receiverId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     status?: boolean
   }
 
-  export type RequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "senderId" | "receiverId" | "status", ExtArgs["result"]["request"]>
+  export type RequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "senderId" | "receiverId" | "createdAt" | "updatedAt" | "status", ExtArgs["result"]["request"]>
+  export type RequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+    receiver?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type RequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+    receiver?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type RequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+    receiver?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $RequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Request"
-    objects: {}
+    objects: {
+      sender: Prisma.$UserPayload<ExtArgs>
+      receiver: Prisma.$UserPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       senderId: string
       receiverId: string
+      createdAt: Date
+      updatedAt: Date
       status: $Enums.Status
     }, ExtArgs["result"]["request"]>
     composites: {}
@@ -6115,6 +6303,8 @@ export namespace Prisma {
    */
   export interface Prisma__RequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    sender<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    receiver<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6147,6 +6337,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Request", 'String'>
     readonly senderId: FieldRef<"Request", 'String'>
     readonly receiverId: FieldRef<"Request", 'String'>
+    readonly createdAt: FieldRef<"Request", 'DateTime'>
+    readonly updatedAt: FieldRef<"Request", 'DateTime'>
     readonly status: FieldRef<"Request", 'Status'>
   }
     
@@ -6164,6 +6356,10 @@ export namespace Prisma {
      * Omit specific fields from the Request
      */
     omit?: RequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
     /**
      * Filter, which Request to fetch.
      */
@@ -6183,6 +6379,10 @@ export namespace Prisma {
      */
     omit?: RequestOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
+    /**
      * Filter, which Request to fetch.
      */
     where: RequestWhereUniqueInput
@@ -6200,6 +6400,10 @@ export namespace Prisma {
      * Omit specific fields from the Request
      */
     omit?: RequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
     /**
      * Filter, which Request to fetch.
      */
@@ -6249,6 +6453,10 @@ export namespace Prisma {
      */
     omit?: RequestOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
+    /**
      * Filter, which Request to fetch.
      */
     where?: RequestWhereInput
@@ -6297,6 +6505,10 @@ export namespace Prisma {
      */
     omit?: RequestOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
+    /**
      * Filter, which Requests to fetch.
      */
     where?: RequestWhereInput
@@ -6340,6 +6552,10 @@ export namespace Prisma {
      */
     omit?: RequestOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
+    /**
      * The data needed to create a Request.
      */
     data: XOR<RequestCreateInput, RequestUncheckedCreateInput>
@@ -6373,6 +6589,10 @@ export namespace Prisma {
      */
     data: RequestCreateManyInput | RequestCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6387,6 +6607,10 @@ export namespace Prisma {
      * Omit specific fields from the Request
      */
     omit?: RequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
     /**
      * The data needed to update a Request.
      */
@@ -6439,6 +6663,10 @@ export namespace Prisma {
      * Limit how many Requests to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6453,6 +6681,10 @@ export namespace Prisma {
      * Omit specific fields from the Request
      */
     omit?: RequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
     /**
      * The filter to search for the Request to update in case it exists.
      */
@@ -6479,6 +6711,10 @@ export namespace Prisma {
      * Omit specific fields from the Request
      */
     omit?: RequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
     /**
      * Filter which Request to delete.
      */
@@ -6511,6 +6747,10 @@ export namespace Prisma {
      * Omit specific fields from the Request
      */
     omit?: RequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RequestInclude<ExtArgs> | null
   }
 
 
@@ -6553,7 +6793,7 @@ export namespace Prisma {
 
   export const MessageScalarFieldEnum: {
     id: 'id',
-    sender: 'sender',
+    senderId: 'senderId',
     content: 'content',
     chatId: 'chatId',
     createdAt: 'createdAt',
@@ -6577,6 +6817,8 @@ export namespace Prisma {
     id: 'id',
     senderId: 'senderId',
     receiverId: 'receiverId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     status: 'status'
   };
 
@@ -6687,6 +6929,8 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     avatar?: StringFilter<"User"> | string
     bio?: StringFilter<"User"> | string
+    sentRequests?: RequestListRelationFilter
+    receivedRequests?: RequestListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -6695,6 +6939,8 @@ export namespace Prisma {
     password?: SortOrder
     avatar?: SortOrder
     bio?: SortOrder
+    sentRequests?: RequestOrderByRelationAggregateInput
+    receivedRequests?: RequestOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -6706,6 +6952,8 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     avatar?: StringFilter<"User"> | string
     bio?: StringFilter<"User"> | string
+    sentRequests?: RequestListRelationFilter
+    receivedRequests?: RequestListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -6795,7 +7043,7 @@ export namespace Prisma {
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
     id?: StringFilter<"Message"> | string
-    sender?: StringFilter<"Message"> | string
+    senderId?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
     chatId?: StringFilter<"Message"> | string
     createdAt?: DateTimeFilter<"Message"> | Date | string
@@ -6806,7 +7054,7 @@ export namespace Prisma {
 
   export type MessageOrderByWithRelationInput = {
     id?: SortOrder
-    sender?: SortOrder
+    senderId?: SortOrder
     content?: SortOrder
     chatId?: SortOrder
     createdAt?: SortOrder
@@ -6820,7 +7068,7 @@ export namespace Prisma {
     AND?: MessageWhereInput | MessageWhereInput[]
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
-    sender?: StringFilter<"Message"> | string
+    senderId?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
     chatId?: StringFilter<"Message"> | string
     createdAt?: DateTimeFilter<"Message"> | Date | string
@@ -6831,7 +7079,7 @@ export namespace Prisma {
 
   export type MessageOrderByWithAggregationInput = {
     id?: SortOrder
-    sender?: SortOrder
+    senderId?: SortOrder
     content?: SortOrder
     chatId?: SortOrder
     createdAt?: SortOrder
@@ -6846,7 +7094,7 @@ export namespace Prisma {
     OR?: MessageScalarWhereWithAggregatesInput[]
     NOT?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Message"> | string
-    sender?: StringWithAggregatesFilter<"Message"> | string
+    senderId?: StringWithAggregatesFilter<"Message"> | string
     content?: StringWithAggregatesFilter<"Message"> | string
     chatId?: StringWithAggregatesFilter<"Message"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
@@ -6910,14 +7158,22 @@ export namespace Prisma {
     id?: StringFilter<"Request"> | string
     senderId?: StringFilter<"Request"> | string
     receiverId?: StringFilter<"Request"> | string
+    createdAt?: DateTimeFilter<"Request"> | Date | string
+    updatedAt?: DateTimeFilter<"Request"> | Date | string
     status?: EnumStatusFilter<"Request"> | $Enums.Status
+    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
+    receiver?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type RequestOrderByWithRelationInput = {
     id?: SortOrder
     senderId?: SortOrder
     receiverId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     status?: SortOrder
+    sender?: UserOrderByWithRelationInput
+    receiver?: UserOrderByWithRelationInput
   }
 
   export type RequestWhereUniqueInput = Prisma.AtLeast<{
@@ -6927,13 +7183,19 @@ export namespace Prisma {
     NOT?: RequestWhereInput | RequestWhereInput[]
     senderId?: StringFilter<"Request"> | string
     receiverId?: StringFilter<"Request"> | string
+    createdAt?: DateTimeFilter<"Request"> | Date | string
+    updatedAt?: DateTimeFilter<"Request"> | Date | string
     status?: EnumStatusFilter<"Request"> | $Enums.Status
+    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
+    receiver?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type RequestOrderByWithAggregationInput = {
     id?: SortOrder
     senderId?: SortOrder
     receiverId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     status?: SortOrder
     _count?: RequestCountOrderByAggregateInput
     _max?: RequestMaxOrderByAggregateInput
@@ -6947,6 +7209,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Request"> | string
     senderId?: StringWithAggregatesFilter<"Request"> | string
     receiverId?: StringWithAggregatesFilter<"Request"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Request"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Request"> | Date | string
     status?: EnumStatusWithAggregatesFilter<"Request"> | $Enums.Status
   }
 
@@ -6956,6 +7220,8 @@ export namespace Prisma {
     password: string
     avatar: string
     bio: string
+    sentRequests?: RequestCreateNestedManyWithoutSenderInput
+    receivedRequests?: RequestCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -6964,6 +7230,8 @@ export namespace Prisma {
     password: string
     avatar: string
     bio: string
+    sentRequests?: RequestUncheckedCreateNestedManyWithoutSenderInput
+    receivedRequests?: RequestUncheckedCreateNestedManyWithoutReceiverInput
   }
 
   export type UserUpdateInput = {
@@ -6972,6 +7240,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     avatar?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
+    sentRequests?: RequestUpdateManyWithoutSenderNestedInput
+    receivedRequests?: RequestUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -6980,6 +7250,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     avatar?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
+    sentRequests?: RequestUncheckedUpdateManyWithoutSenderNestedInput
+    receivedRequests?: RequestUncheckedUpdateManyWithoutReceiverNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -7075,7 +7347,7 @@ export namespace Prisma {
 
   export type MessageCreateInput = {
     id?: string
-    sender: string
+    senderId: string
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7085,7 +7357,7 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateInput = {
     id?: string
-    sender: string
+    senderId: string
     content: string
     chatId: string
     createdAt?: Date | string
@@ -7095,7 +7367,7 @@ export namespace Prisma {
 
   export type MessageUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7105,7 +7377,7 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     chatId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7115,7 +7387,7 @@ export namespace Prisma {
 
   export type MessageCreateManyInput = {
     id?: string
-    sender: string
+    senderId: string
     content: string
     chatId: string
     createdAt?: Date | string
@@ -7124,7 +7396,7 @@ export namespace Prisma {
 
   export type MessageUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7132,7 +7404,7 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     chatId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7189,29 +7461,37 @@ export namespace Prisma {
 
   export type RequestCreateInput = {
     id?: string
-    senderId: string
-    receiverId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     status?: $Enums.Status
+    sender: UserCreateNestedOneWithoutSentRequestsInput
+    receiver: UserCreateNestedOneWithoutReceivedRequestsInput
   }
 
   export type RequestUncheckedCreateInput = {
     id?: string
     senderId: string
     receiverId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     status?: $Enums.Status
   }
 
   export type RequestUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    senderId?: StringFieldUpdateOperationsInput | string
-    receiverId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    sender?: UserUpdateOneRequiredWithoutSentRequestsNestedInput
+    receiver?: UserUpdateOneRequiredWithoutReceivedRequestsNestedInput
   }
 
   export type RequestUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     senderId?: StringFieldUpdateOperationsInput | string
     receiverId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
@@ -7219,13 +7499,15 @@ export namespace Prisma {
     id?: string
     senderId: string
     receiverId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     status?: $Enums.Status
   }
 
   export type RequestUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    senderId?: StringFieldUpdateOperationsInput | string
-    receiverId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
@@ -7233,6 +7515,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     senderId?: StringFieldUpdateOperationsInput | string
     receiverId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
@@ -7249,6 +7533,16 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type RequestListRelationFilter = {
+    every?: RequestWhereInput
+    some?: RequestWhereInput
+    none?: RequestWhereInput
+  }
+
+  export type RequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -7415,7 +7709,7 @@ export namespace Prisma {
 
   export type MessageCountOrderByAggregateInput = {
     id?: SortOrder
-    sender?: SortOrder
+    senderId?: SortOrder
     content?: SortOrder
     chatId?: SortOrder
     createdAt?: SortOrder
@@ -7424,7 +7718,7 @@ export namespace Prisma {
 
   export type MessageMaxOrderByAggregateInput = {
     id?: SortOrder
-    sender?: SortOrder
+    senderId?: SortOrder
     content?: SortOrder
     chatId?: SortOrder
     createdAt?: SortOrder
@@ -7433,7 +7727,7 @@ export namespace Prisma {
 
   export type MessageMinOrderByAggregateInput = {
     id?: SortOrder
-    sender?: SortOrder
+    senderId?: SortOrder
     content?: SortOrder
     chatId?: SortOrder
     createdAt?: SortOrder
@@ -7487,10 +7781,17 @@ export namespace Prisma {
     not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
   export type RequestCountOrderByAggregateInput = {
     id?: SortOrder
     senderId?: SortOrder
     receiverId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     status?: SortOrder
   }
 
@@ -7498,6 +7799,8 @@ export namespace Prisma {
     id?: SortOrder
     senderId?: SortOrder
     receiverId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     status?: SortOrder
   }
 
@@ -7505,6 +7808,8 @@ export namespace Prisma {
     id?: SortOrder
     senderId?: SortOrder
     receiverId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     status?: SortOrder
   }
 
@@ -7518,8 +7823,92 @@ export namespace Prisma {
     _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
+  export type RequestCreateNestedManyWithoutSenderInput = {
+    create?: XOR<RequestCreateWithoutSenderInput, RequestUncheckedCreateWithoutSenderInput> | RequestCreateWithoutSenderInput[] | RequestUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: RequestCreateOrConnectWithoutSenderInput | RequestCreateOrConnectWithoutSenderInput[]
+    createMany?: RequestCreateManySenderInputEnvelope
+    connect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+  }
+
+  export type RequestCreateNestedManyWithoutReceiverInput = {
+    create?: XOR<RequestCreateWithoutReceiverInput, RequestUncheckedCreateWithoutReceiverInput> | RequestCreateWithoutReceiverInput[] | RequestUncheckedCreateWithoutReceiverInput[]
+    connectOrCreate?: RequestCreateOrConnectWithoutReceiverInput | RequestCreateOrConnectWithoutReceiverInput[]
+    createMany?: RequestCreateManyReceiverInputEnvelope
+    connect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+  }
+
+  export type RequestUncheckedCreateNestedManyWithoutSenderInput = {
+    create?: XOR<RequestCreateWithoutSenderInput, RequestUncheckedCreateWithoutSenderInput> | RequestCreateWithoutSenderInput[] | RequestUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: RequestCreateOrConnectWithoutSenderInput | RequestCreateOrConnectWithoutSenderInput[]
+    createMany?: RequestCreateManySenderInputEnvelope
+    connect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+  }
+
+  export type RequestUncheckedCreateNestedManyWithoutReceiverInput = {
+    create?: XOR<RequestCreateWithoutReceiverInput, RequestUncheckedCreateWithoutReceiverInput> | RequestCreateWithoutReceiverInput[] | RequestUncheckedCreateWithoutReceiverInput[]
+    connectOrCreate?: RequestCreateOrConnectWithoutReceiverInput | RequestCreateOrConnectWithoutReceiverInput[]
+    createMany?: RequestCreateManyReceiverInputEnvelope
+    connect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type RequestUpdateManyWithoutSenderNestedInput = {
+    create?: XOR<RequestCreateWithoutSenderInput, RequestUncheckedCreateWithoutSenderInput> | RequestCreateWithoutSenderInput[] | RequestUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: RequestCreateOrConnectWithoutSenderInput | RequestCreateOrConnectWithoutSenderInput[]
+    upsert?: RequestUpsertWithWhereUniqueWithoutSenderInput | RequestUpsertWithWhereUniqueWithoutSenderInput[]
+    createMany?: RequestCreateManySenderInputEnvelope
+    set?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    disconnect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    delete?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    connect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    update?: RequestUpdateWithWhereUniqueWithoutSenderInput | RequestUpdateWithWhereUniqueWithoutSenderInput[]
+    updateMany?: RequestUpdateManyWithWhereWithoutSenderInput | RequestUpdateManyWithWhereWithoutSenderInput[]
+    deleteMany?: RequestScalarWhereInput | RequestScalarWhereInput[]
+  }
+
+  export type RequestUpdateManyWithoutReceiverNestedInput = {
+    create?: XOR<RequestCreateWithoutReceiverInput, RequestUncheckedCreateWithoutReceiverInput> | RequestCreateWithoutReceiverInput[] | RequestUncheckedCreateWithoutReceiverInput[]
+    connectOrCreate?: RequestCreateOrConnectWithoutReceiverInput | RequestCreateOrConnectWithoutReceiverInput[]
+    upsert?: RequestUpsertWithWhereUniqueWithoutReceiverInput | RequestUpsertWithWhereUniqueWithoutReceiverInput[]
+    createMany?: RequestCreateManyReceiverInputEnvelope
+    set?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    disconnect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    delete?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    connect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    update?: RequestUpdateWithWhereUniqueWithoutReceiverInput | RequestUpdateWithWhereUniqueWithoutReceiverInput[]
+    updateMany?: RequestUpdateManyWithWhereWithoutReceiverInput | RequestUpdateManyWithWhereWithoutReceiverInput[]
+    deleteMany?: RequestScalarWhereInput | RequestScalarWhereInput[]
+  }
+
+  export type RequestUncheckedUpdateManyWithoutSenderNestedInput = {
+    create?: XOR<RequestCreateWithoutSenderInput, RequestUncheckedCreateWithoutSenderInput> | RequestCreateWithoutSenderInput[] | RequestUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: RequestCreateOrConnectWithoutSenderInput | RequestCreateOrConnectWithoutSenderInput[]
+    upsert?: RequestUpsertWithWhereUniqueWithoutSenderInput | RequestUpsertWithWhereUniqueWithoutSenderInput[]
+    createMany?: RequestCreateManySenderInputEnvelope
+    set?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    disconnect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    delete?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    connect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    update?: RequestUpdateWithWhereUniqueWithoutSenderInput | RequestUpdateWithWhereUniqueWithoutSenderInput[]
+    updateMany?: RequestUpdateManyWithWhereWithoutSenderInput | RequestUpdateManyWithWhereWithoutSenderInput[]
+    deleteMany?: RequestScalarWhereInput | RequestScalarWhereInput[]
+  }
+
+  export type RequestUncheckedUpdateManyWithoutReceiverNestedInput = {
+    create?: XOR<RequestCreateWithoutReceiverInput, RequestUncheckedCreateWithoutReceiverInput> | RequestCreateWithoutReceiverInput[] | RequestUncheckedCreateWithoutReceiverInput[]
+    connectOrCreate?: RequestCreateOrConnectWithoutReceiverInput | RequestCreateOrConnectWithoutReceiverInput[]
+    upsert?: RequestUpsertWithWhereUniqueWithoutReceiverInput | RequestUpsertWithWhereUniqueWithoutReceiverInput[]
+    createMany?: RequestCreateManyReceiverInputEnvelope
+    set?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    disconnect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    delete?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    connect?: RequestWhereUniqueInput | RequestWhereUniqueInput[]
+    update?: RequestUpdateWithWhereUniqueWithoutReceiverInput | RequestUpdateWithWhereUniqueWithoutReceiverInput[]
+    updateMany?: RequestUpdateManyWithWhereWithoutReceiverInput | RequestUpdateManyWithWhereWithoutReceiverInput[]
+    deleteMany?: RequestScalarWhereInput | RequestScalarWhereInput[]
   }
 
   export type ChatCreatemembersInput = {
@@ -7655,8 +8044,36 @@ export namespace Prisma {
     update?: XOR<XOR<MessageUpdateToOneWithWhereWithoutAttachmentsInput, MessageUpdateWithoutAttachmentsInput>, MessageUncheckedUpdateWithoutAttachmentsInput>
   }
 
+  export type UserCreateNestedOneWithoutSentRequestsInput = {
+    create?: XOR<UserCreateWithoutSentRequestsInput, UserUncheckedCreateWithoutSentRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSentRequestsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReceivedRequestsInput = {
+    create?: XOR<UserCreateWithoutReceivedRequestsInput, UserUncheckedCreateWithoutReceivedRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivedRequestsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type EnumStatusFieldUpdateOperationsInput = {
     set?: $Enums.Status
+  }
+
+  export type UserUpdateOneRequiredWithoutSentRequestsNestedInput = {
+    create?: XOR<UserCreateWithoutSentRequestsInput, UserUncheckedCreateWithoutSentRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSentRequestsInput
+    upsert?: UserUpsertWithoutSentRequestsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSentRequestsInput, UserUpdateWithoutSentRequestsInput>, UserUncheckedUpdateWithoutSentRequestsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutReceivedRequestsNestedInput = {
+    create?: XOR<UserCreateWithoutReceivedRequestsInput, UserUncheckedCreateWithoutReceivedRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivedRequestsInput
+    upsert?: UserUpsertWithoutReceivedRequestsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivedRequestsInput, UserUpdateWithoutReceivedRequestsInput>, UserUncheckedUpdateWithoutReceivedRequestsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -7798,9 +8215,105 @@ export namespace Prisma {
     _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
+  export type RequestCreateWithoutSenderInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.Status
+    receiver: UserCreateNestedOneWithoutReceivedRequestsInput
+  }
+
+  export type RequestUncheckedCreateWithoutSenderInput = {
+    id?: string
+    receiverId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.Status
+  }
+
+  export type RequestCreateOrConnectWithoutSenderInput = {
+    where: RequestWhereUniqueInput
+    create: XOR<RequestCreateWithoutSenderInput, RequestUncheckedCreateWithoutSenderInput>
+  }
+
+  export type RequestCreateManySenderInputEnvelope = {
+    data: RequestCreateManySenderInput | RequestCreateManySenderInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RequestCreateWithoutReceiverInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.Status
+    sender: UserCreateNestedOneWithoutSentRequestsInput
+  }
+
+  export type RequestUncheckedCreateWithoutReceiverInput = {
+    id?: string
+    senderId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.Status
+  }
+
+  export type RequestCreateOrConnectWithoutReceiverInput = {
+    where: RequestWhereUniqueInput
+    create: XOR<RequestCreateWithoutReceiverInput, RequestUncheckedCreateWithoutReceiverInput>
+  }
+
+  export type RequestCreateManyReceiverInputEnvelope = {
+    data: RequestCreateManyReceiverInput | RequestCreateManyReceiverInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RequestUpsertWithWhereUniqueWithoutSenderInput = {
+    where: RequestWhereUniqueInput
+    update: XOR<RequestUpdateWithoutSenderInput, RequestUncheckedUpdateWithoutSenderInput>
+    create: XOR<RequestCreateWithoutSenderInput, RequestUncheckedCreateWithoutSenderInput>
+  }
+
+  export type RequestUpdateWithWhereUniqueWithoutSenderInput = {
+    where: RequestWhereUniqueInput
+    data: XOR<RequestUpdateWithoutSenderInput, RequestUncheckedUpdateWithoutSenderInput>
+  }
+
+  export type RequestUpdateManyWithWhereWithoutSenderInput = {
+    where: RequestScalarWhereInput
+    data: XOR<RequestUpdateManyMutationInput, RequestUncheckedUpdateManyWithoutSenderInput>
+  }
+
+  export type RequestScalarWhereInput = {
+    AND?: RequestScalarWhereInput | RequestScalarWhereInput[]
+    OR?: RequestScalarWhereInput[]
+    NOT?: RequestScalarWhereInput | RequestScalarWhereInput[]
+    id?: StringFilter<"Request"> | string
+    senderId?: StringFilter<"Request"> | string
+    receiverId?: StringFilter<"Request"> | string
+    createdAt?: DateTimeFilter<"Request"> | Date | string
+    updatedAt?: DateTimeFilter<"Request"> | Date | string
+    status?: EnumStatusFilter<"Request"> | $Enums.Status
+  }
+
+  export type RequestUpsertWithWhereUniqueWithoutReceiverInput = {
+    where: RequestWhereUniqueInput
+    update: XOR<RequestUpdateWithoutReceiverInput, RequestUncheckedUpdateWithoutReceiverInput>
+    create: XOR<RequestCreateWithoutReceiverInput, RequestUncheckedCreateWithoutReceiverInput>
+  }
+
+  export type RequestUpdateWithWhereUniqueWithoutReceiverInput = {
+    where: RequestWhereUniqueInput
+    data: XOR<RequestUpdateWithoutReceiverInput, RequestUncheckedUpdateWithoutReceiverInput>
+  }
+
+  export type RequestUpdateManyWithWhereWithoutReceiverInput = {
+    where: RequestScalarWhereInput
+    data: XOR<RequestUpdateManyMutationInput, RequestUncheckedUpdateManyWithoutReceiverInput>
+  }
+
   export type MessageCreateWithoutChatInput = {
     id?: string
-    sender: string
+    senderId: string
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7809,7 +8322,7 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutChatInput = {
     id?: string
-    sender: string
+    senderId: string
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7847,7 +8360,7 @@ export namespace Prisma {
     OR?: MessageScalarWhereInput[]
     NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
     id?: StringFilter<"Message"> | string
-    sender?: StringFilter<"Message"> | string
+    senderId?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
     chatId?: StringFilter<"Message"> | string
     createdAt?: DateTimeFilter<"Message"> | Date | string
@@ -7956,7 +8469,7 @@ export namespace Prisma {
 
   export type MessageCreateWithoutAttachmentsInput = {
     id?: string
-    sender: string
+    senderId: string
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7965,7 +8478,7 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutAttachmentsInput = {
     id?: string
-    sender: string
+    senderId: string
     content: string
     chatId: string
     createdAt?: Date | string
@@ -7990,7 +8503,7 @@ export namespace Prisma {
 
   export type MessageUpdateWithoutAttachmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7999,16 +8512,184 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutAttachmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     chatId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserCreateWithoutSentRequestsInput = {
+    id?: string
+    name: string
+    password: string
+    avatar: string
+    bio: string
+    receivedRequests?: RequestCreateNestedManyWithoutReceiverInput
+  }
+
+  export type UserUncheckedCreateWithoutSentRequestsInput = {
+    id?: string
+    name: string
+    password: string
+    avatar: string
+    bio: string
+    receivedRequests?: RequestUncheckedCreateNestedManyWithoutReceiverInput
+  }
+
+  export type UserCreateOrConnectWithoutSentRequestsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSentRequestsInput, UserUncheckedCreateWithoutSentRequestsInput>
+  }
+
+  export type UserCreateWithoutReceivedRequestsInput = {
+    id?: string
+    name: string
+    password: string
+    avatar: string
+    bio: string
+    sentRequests?: RequestCreateNestedManyWithoutSenderInput
+  }
+
+  export type UserUncheckedCreateWithoutReceivedRequestsInput = {
+    id?: string
+    name: string
+    password: string
+    avatar: string
+    bio: string
+    sentRequests?: RequestUncheckedCreateNestedManyWithoutSenderInput
+  }
+
+  export type UserCreateOrConnectWithoutReceivedRequestsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReceivedRequestsInput, UserUncheckedCreateWithoutReceivedRequestsInput>
+  }
+
+  export type UserUpsertWithoutSentRequestsInput = {
+    update: XOR<UserUpdateWithoutSentRequestsInput, UserUncheckedUpdateWithoutSentRequestsInput>
+    create: XOR<UserCreateWithoutSentRequestsInput, UserUncheckedCreateWithoutSentRequestsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSentRequestsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSentRequestsInput, UserUncheckedUpdateWithoutSentRequestsInput>
+  }
+
+  export type UserUpdateWithoutSentRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    avatar?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    receivedRequests?: RequestUpdateManyWithoutReceiverNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSentRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    avatar?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    receivedRequests?: RequestUncheckedUpdateManyWithoutReceiverNestedInput
+  }
+
+  export type UserUpsertWithoutReceivedRequestsInput = {
+    update: XOR<UserUpdateWithoutReceivedRequestsInput, UserUncheckedUpdateWithoutReceivedRequestsInput>
+    create: XOR<UserCreateWithoutReceivedRequestsInput, UserUncheckedCreateWithoutReceivedRequestsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReceivedRequestsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReceivedRequestsInput, UserUncheckedUpdateWithoutReceivedRequestsInput>
+  }
+
+  export type UserUpdateWithoutReceivedRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    avatar?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    sentRequests?: RequestUpdateManyWithoutSenderNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReceivedRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    avatar?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    sentRequests?: RequestUncheckedUpdateManyWithoutSenderNestedInput
+  }
+
+  export type RequestCreateManySenderInput = {
+    id?: string
+    receiverId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.Status
+  }
+
+  export type RequestCreateManyReceiverInput = {
+    id?: string
+    senderId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.Status
+  }
+
+  export type RequestUpdateWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    receiver?: UserUpdateOneRequiredWithoutReceivedRequestsNestedInput
+  }
+
+  export type RequestUncheckedUpdateWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiverId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  }
+
+  export type RequestUncheckedUpdateManyWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiverId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  }
+
+  export type RequestUpdateWithoutReceiverInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    sender?: UserUpdateOneRequiredWithoutSentRequestsNestedInput
+  }
+
+  export type RequestUncheckedUpdateWithoutReceiverInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  }
+
+  export type RequestUncheckedUpdateManyWithoutReceiverInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  }
+
   export type MessageCreateManyChatInput = {
     id?: string
-    sender: string
+    senderId: string
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8016,7 +8697,7 @@ export namespace Prisma {
 
   export type MessageUpdateWithoutChatInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8025,7 +8706,7 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutChatInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8034,7 +8715,7 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateManyWithoutChatInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

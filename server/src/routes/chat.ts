@@ -18,7 +18,7 @@ import {
 import { isAuthenticted } from "../middleware/AuthMiddleware";
 import { attachmentsMulter } from "../middleware/multer";
 
-export const chatRouter = express();
+export const chatRouter = express.Router();
 
 chatRouter.use(isAuthenticted);
 

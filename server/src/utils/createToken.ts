@@ -24,3 +24,4 @@ export const compareHashedPassword = async (
   const isValid = await bcrypt.compare(password, hashedPassword);
   return isValid;
 };
+

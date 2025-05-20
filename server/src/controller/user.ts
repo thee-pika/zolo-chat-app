@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { signupSchema, loginSchema } from "../../types/types";
+import {
+  signupSchema,
+  loginSchema,
+  acceptRequestSchema,
+} from "../../types/types";
 import { prisma } from "../../db";
 import {
   compareHashedPassword,
@@ -9,7 +13,8 @@ import {
 import { ErrorHandler } from "../utils/utility";
 import { TryCatch } from "../middleware/error";
 import { cookieOptions, emitEvent } from "../utils/feature";
-import { NEW_REQUEST } from "../utils/event";
+import { NEW_REQUEST, REFETCH_CHATS } from "../utils/event";
+import { getOtherMember } from "../lib/helper";
 
 const signUpHandler = TryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -77,7 +82,27 @@ const loginHandler = TryCatch(
   }
 );
 
-const userDetails = (req: Request, res: Response) => {};
+const userDetails = async (req: Request, res: Response) => {
+  const userId = req.userId;
+  if (!userId) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  const user = await prisma.user.findFirst({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
+
+  res.status(200).json({ success: true, user });
+  return;
+};
 
 const logoutHandler = TryCatch(async (req: Request, res: Response) => {
   res
@@ -153,4 +178,158 @@ const sendFriendRequest = TryCatch(
   }
 );
 
-export { signUpHandler, loginHandler, userDetails, logoutHandler };
+const acceptFriendRequest = TryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const parsedData = await acceptRequestSchema.safeParse(req.body);
+    if (!parsedData.success) {
+      next(new ErrorHandler("Invalid input data", 400));
+      return;
+    }
+    const { requestId, accept } = parsedData.data;
+
+    const request = await prisma.request.findFirst({
+      where: {
+        id: requestId,
+      },
+    });
+
+    if (!request) {
+      next(new ErrorHandler("Request Not Found", 400));
+      return;
+    }
+
+    const members = [request.senderId, request.receiverId];
+
+    await Promise.all([
+      prisma.chat.create({
+        data: {
+          members,
+          groupChat: true,
+          chatName: `${request.senderId}-${request.receiverId}`,
+        },
+      }),
+      prisma.request.update({
+        where: {
+          id: requestId,
+        },
+        data: {
+          status: accept ? "ACCEPTED" : "REJECTED",
+        },
+      }),
+    ]);
+
+    emitEvent(req, REFETCH_CHATS, members);
+    res.status(200).json({
+      success: true,
+      message: `Friend request ${accept ? "accepted" : "rejected"}`,
+    });
+    return;
+  }
+);
+
+const getAllNotifications = TryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const requests = await prisma.request.findMany({
+      where: {
+        receiverId: req.userId,
+      },
+      include: {
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    if (!requests) {
+      next(new ErrorHandler("No requests found", 400));
+      return;
+    }
+
+    const allRequests = requests.map(({ id, senderId, sender }) => ({
+      id,
+      sender: {
+        id: senderId,
+        name: sender.name,
+        avatar: sender.avatar,
+      },
+    }));
+    res.status(200).json({ success: true, requests: allRequests });
+  }
+);
+
+const getMyFriends = TryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const chatId = req.query.chatId as string;
+
+    const chats = await prisma.chat.findMany({
+      where: {
+        members: {
+          has: req.userId,
+        },
+        groupChat: false,
+      },
+      select: {
+        members: true,
+      },
+    });
+
+    if (!chats || chats.length === 0) {
+      next(new ErrorHandler("No chats found", 400));
+      return;
+    }
+
+    const friendsIds = [
+      ...new Set(
+        chats.flatMap(({ members }) =>
+          members.filter((id) => id !== req.userId)
+        )
+      ),
+    ];
+
+    const friends = await prisma.user.findMany({
+      where: {
+        id: {
+          in: friendsIds,
+        },
+      },
+    });
+
+    if (chatId) {
+      const chat = await prisma.chat.findFirst({
+        where: {
+          id: chatId,
+        },
+      });
+
+      if (!chat) {
+        next(new ErrorHandler("Chat not found", 400));
+        return;
+      }
+      const availableFriends = friends.filter(
+        (friend) => !chat.members.includes(friend.id)
+      );
+
+      res.status(200).json({ success: true, availableFriends });
+      return;
+    }
+
+    res.status(200).json({ success: true, friends });
+    return;
+  }
+);
+
+export {
+  signUpHandler,
+  loginHandler,
+  userDetails,
+  logoutHandler,
+  acceptFriendRequest,
+  sendFriendRequest,
+  searchUser,
+  getAllNotifications,
+  getMyFriends,
+};
