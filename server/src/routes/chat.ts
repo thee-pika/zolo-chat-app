@@ -30,9 +30,9 @@ chatRouter.get("/details/:id", getChatDetails);
 
 chatRouter.put("/:id", updateGroupChats);
 
-chatRouter.delete("/:id", deleteGroupChats);
-
 chatRouter.get("/:id", getGroupChatsById);
+
+chatRouter.delete("/group/:id", deleteGroupChats);
 
 chatRouter.get("/groups/my", getMyGroups);
 
@@ -44,8 +44,8 @@ chatRouter.delete("/group/leave/:id", leaveGroup);
 
 chatRouter.post("/message", attachmentsMulter, sendAttachments);
 
-chatRouter.post("/group/rename", renameGroup);
+chatRouter.post("/group/rename/:id", renameGroup);
 
-chatRouter.get("/message/:id", getMessages);
+chatRouter.get("/:id/message", getMessages);
 
-chatRouter.delete("/chat/:id", deleteChat);
+chatRouter.delete("/:id", deleteChat);

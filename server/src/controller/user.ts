@@ -73,7 +73,10 @@ const loginHandler = TryCatch(
     }
 
     const token = await createToken(user.id);
-    res.status(200).json({
+    
+    res.status(200)
+    .cookie("access_token", token, cookieOptions)
+    .json({
       message: "Login successful",
       token,
     });

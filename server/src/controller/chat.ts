@@ -3,6 +3,7 @@ import {
   addMembersSchema,
   removeMemberSchema,
   AttachmentsSchema,
+  updateGroupSchema,
 } from "../../types/types";
 import { TryCatch } from "../middleware/error";
 import { Request, Response, NextFunction } from "express";
@@ -16,6 +17,7 @@ import {
   REFETCH_CHATS,
 } from "../utils/event";
 import { findUserById, getOtherMember } from "../lib/helper";
+import { string } from "zod";
 
 const createGroupChat = TryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -51,7 +53,9 @@ const createGroupChat = TryCatch(
     emitEvent(req, ALERT, allMembers, `welcome to ${chatName} group.`);
     emitEvent(req, REFETCH_CHATS, allMembers, "");
 
-    res.status(200).json({ message: "user created successfully", id: chat.id });
+    res
+      .status(200)
+      .json({ message: "Group Chat created successfully", id: chat.id });
     return;
   }
 );
@@ -66,20 +70,23 @@ const getAllMyChats = TryCatch(
       },
     });
 
+    console.log("chats", chats);
+
     const transformedChats = chats.map(async (chat) => {
       const { chatName, avatar, id, groupChat, creator, members } = chat;
       const otherMemeberId = getOtherMember(members, req.userId!);
 
       if (!otherMemeberId) {
+        console.log("otherMemeberId not found");
         return;
       }
 
       const otherUser = await findUserById(otherMemeberId);
 
       if (!otherUser) {
+        console.log("otherUser not found");
         return;
       }
-
       return {
         id: id,
         name: groupChat ? chatName : otherUser.name,
@@ -94,9 +101,11 @@ const getAllMyChats = TryCatch(
       };
     });
 
+    const Chats = await Promise.all(transformedChats);
+
     res.json({
       success: true,
-      chats: transformedChats,
+      chats: Chats,
     });
 
     return;
@@ -104,11 +113,84 @@ const getAllMyChats = TryCatch(
 );
 
 const deleteGroupChats = TryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    const chatId = req.params.id;
+
+    if (!chatId) {
+      next(new ErrorHandler("chatId not found", 404));
+      return;
+    }
+
+    const chat = await prisma.chat.findFirst({
+      where: {
+        id: chatId,
+      },
+    });
+
+    if (!chat) {
+      next(new ErrorHandler("Chat not found", 404));
+      return;
+    }
+
+    if (!chat.groupChat) {
+      next(new ErrorHandler("Chat is not a groupChat", 404));
+      return;
+    }
+
+    if (chat.creator?.toString() !== req.userId?.toString()) {
+      next(new ErrorHandler("Access DENIED", 403));
+      return;
+    }
+
+    await prisma.chat.delete({
+      where: {
+        id: chatId,
+      },
+    });
+
+    await prisma.message.deleteMany({
+      where: {
+        chatId,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Group Chat deleted successfully",
+    });
+  }
 );
 
 const getGroupChatsById = TryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    const chatId = req.params.id;
+
+    if (!chatId) {
+      next(new ErrorHandler("chatId not found", 404));
+      return;
+    }
+    const chat = await prisma.chat.findFirst({
+      where: {
+        id: chatId,
+      },
+    });
+
+    if (!chat) {
+      next(new ErrorHandler("Chat not found", 404));
+      return;
+    }
+
+    if (!chat.groupChat) {
+      next(new ErrorHandler("Chat is not a groupChat", 404));
+      return;
+    }
+
+    res.json({
+      success: true,
+      message: " group chat details  fetched successfully .",
+      chat,
+    });
+  }
 );
 
 const getMyGroups = TryCatch(
@@ -123,7 +205,7 @@ const getMyGroups = TryCatch(
       },
     });
 
-    res.json({ chats });
+    res.json({ success: true, chats });
   }
 );
 
@@ -156,7 +238,7 @@ const addMembers = TryCatch(
     }
 
     if (!chat.groupChat) {
-      next(new ErrorHandler("Chat not found", 404));
+      next(new ErrorHandler("Chat is not a group chat", 404));
       return;
     }
 
@@ -176,7 +258,7 @@ const addMembers = TryCatch(
       return;
     }
 
-    const updatedChat = await prisma.chat.update({
+    await prisma.chat.update({
       where: {
         id: chatId,
       },
@@ -441,14 +523,81 @@ const getChatDetails = TryCatch(
 
     res.json({
       success: true,
-      message: "Attachments  sent successfully .",
+      message: "chat details  fetched successfully .",
       chat,
     });
   }
 );
 
 const updateGroupChats = TryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    const chatId = req.params.id;
+
+    if (!chatId) {
+      next(new ErrorHandler("chatId not found", 404));
+      return;
+    }
+
+    const chat = await prisma.chat.findFirst({
+      where: {
+        id: chatId,
+      },
+    });
+
+    if (!chat) {
+      next(new ErrorHandler("Chat not found", 404));
+      return;
+    }
+
+    if (!chat.groupChat) {
+      next(new ErrorHandler("Chat is not a groupChat", 404));
+      return;
+    }
+
+    if (chat.creator?.toString() !== req.userId?.toString()) {
+      next(new ErrorHandler("Access DENIED", 403));
+      return;
+    }
+
+    const parsedData = await updateGroupSchema.safeParse(req.body);
+    if (!parsedData.success) {
+      next(new ErrorHandler("Invalid data", 400));
+      return;
+    }
+
+    const { creator, avatar } = parsedData.data;
+
+    const updates: {
+      creator?: string;
+      avatar?: string;
+    } = {};
+
+    if (creator && creator !== chat.creator) {
+      updates.creator = creator;
+    }
+
+    if (avatar) {
+      updates.avatar = avatar;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      next(new ErrorHandler("No valid fields to update", 400));
+      return;
+    }
+
+    const updatedChat = await prisma.chat.update({
+      where: {
+        id: chatId,
+      },
+      data: updates,
+    });
+
+    res.json({
+      success: true,
+      message: "chat updated successfully .",
+      chat: updatedChat,
+    });
+  }
 );
 
 const renameGroup = TryCatch(
@@ -505,6 +654,7 @@ const renameGroup = TryCatch(
 const deleteChat = TryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const chatId = req.params.id;
+    console.log("do iam here ");
 
     if (!chatId) {
       next(new ErrorHandler("chatId not found", 404));
@@ -522,7 +672,8 @@ const deleteChat = TryCatch(
       return;
     }
 
-    if (chat.groupChat && chat.creator?.toString() !== req.userId?.toString()) {
+    console.log("chat", chat);
+    if (chat.groupChat) {
       next(new ErrorHandler("ACCESS DENIED", 404));
       return;
     }
@@ -538,6 +689,8 @@ const deleteChat = TryCatch(
         attachments: true,
       },
     });
+
+    console.log("messagesWithAttachMents", messagesWithAttachMents);
 
     const public_ids: string[] = [];
 
@@ -591,7 +744,11 @@ const getMessages = TryCatch(
           createdAt: "desc",
         },
       }),
-      prisma.message.count(),
+      prisma.message.count({
+        where: {
+          chatId,
+        },
+      }),
     ]);
 
     const totalPages = Math.ceil(totalMessages / limit);
