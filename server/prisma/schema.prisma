@@ -17,8 +17,10 @@ datasource db {
 model User {
   id               String    @id @default(uuid())
   name             String
+  email            String
   password         String
   avatar           String
+  publicId         String?
   bio              String
   sentRequests     Request[] @relation("Sender")
   receivedRequests Request[] @relation("Receiver")

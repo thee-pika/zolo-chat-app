@@ -1,10 +1,11 @@
 import { Request } from "express";
+import { CookieOptions } from "express";
 
-const cookieOptions = {
-  secure: process.env.NODE_ENV === "production",
+const isProduction = process.env.NODE_ENV === "production";
+
+const cookieOptions: CookieOptions = {
+  maxAge: 15 * 24 * 60 * 60 * 1000,
   httpOnly: true,
-  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
 const emitEvent = (

@@ -10,6 +10,7 @@ import { NEW_MESSAGE, NEW_MESSAGE_ALERT } from "./utils/event";
 import { v4 as uuidv4 } from "uuid";
 import { getSockets } from "./lib/helper";
 import { prisma } from "../db";
+
 config();
 
 const app = express();
@@ -22,7 +23,7 @@ const userSocketIds = new Map();
 
 io.use((socket, next) => {
   next();
-})
+});
 
 io.on("connection", (socket) => {
   console.log("Socket connected", socket.id);
@@ -33,8 +34,12 @@ io.on("connection", (socket) => {
   };
 
   userSocketIds.set(user.id, socket.id);
+  console.log("User Socket IDs", userSocketIds);
+  socket.on(NEW_MESSAGE, async (data) => {
+    const { chatId, members, message } = JSON.parse(data);
 
-  socket.on(NEW_MESSAGE, async ({ chatId, members, message }) => {
+    console.log(chatId, members, message);
+
     const messageForRT = {
       content: message,
       id: uuidv4(),
@@ -54,7 +59,8 @@ io.on("connection", (socket) => {
       chatId,
     };
 
-    const userSockets = getSockets(members, userSocketIds);
+    const userSockets = getSockets([user], userSocketIds);
+    console.log("User Sockets", userSockets);
 
     const filteredUserSockets = userSockets.filter(
       (id): id is string => typeof id === "string"
@@ -88,11 +94,17 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("Socket disconnected");
+    userSocketIds.delete(user.id);
   });
 });
 
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+};
+
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 const PORT = process.env.PORT || 5000;
@@ -105,6 +117,6 @@ app.use("/api/v1", router);
 
 app.use(errorMiddleware);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("App is running on", PORT);
 });

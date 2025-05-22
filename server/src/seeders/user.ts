@@ -12,6 +12,7 @@ const createUser = async (numUsers: number) => {
       const tmpUser = await prisma.user.create({
         data: {
           name: faker.person.fullName(),
+          email: faker.internet.email(),
           password: hashedPassword,
           avatar: faker.image.avatar(),
           bio: faker.lorem.sentence(),
@@ -115,7 +116,6 @@ const createMessages = async (numMessages: number) => {
       }),
     ]);
 
-
     if (users.length === 0 || chats.length === 0) {
       console.log("No users or chats found");
       return;
@@ -124,7 +124,6 @@ const createMessages = async (numMessages: number) => {
     const messagesPromise = [];
 
     for (let i = 0; i < numMessages; i++) {
- 
       const randomUser = users[Math.floor(Math.random() * users.length)];
       const randomChat = chats[Math.floor(Math.random() * chats.length)];
 
@@ -139,7 +138,6 @@ const createMessages = async (numMessages: number) => {
       );
 
       await Promise.all(messagesPromise);
-
     }
   } catch (error) {
     console.log(error);
@@ -175,10 +173,26 @@ const createMessagesInAChat = async (chatId: string, numMessages: number) => {
   }
 };
 
+const createEmailsForAllUsers = async () => {
+  const users = await prisma.user.findMany({});
+
+  const updatedUsers = users.map(async (user) => {
+    const email = faker.internet.email({ firstName: user.name });
+
+    return prisma.user.update({
+      where: { id: user.id },
+      data: { email },
+    });
+  });
+
+  await Promise.all(updatedUsers);
+};
+
 export {
   createMessagesInAChat,
   createMessages,
   createUser,
   createSingleChats,
   createMessagesInAGroup,
+  createEmailsForAllUsers,
 };

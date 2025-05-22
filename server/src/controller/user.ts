@@ -14,28 +14,62 @@ import { ErrorHandler } from "../utils/utility";
 import { TryCatch } from "../middleware/error";
 import { cookieOptions, emitEvent } from "../utils/feature";
 import { NEW_REQUEST, REFETCH_CHATS } from "../utils/event";
+import { uploadImageToCloudinary } from "../utils/imageUpload";
 
 const signUpHandler = TryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("req.bodyyyyyyyyyyyy", req.body);
     const parsedData = await signupSchema.safeParse(req.body);
 
+    console.log("Parsed data", parsedData);
+
     if (!parsedData.success) {
+      console.log("Parsed data error", parsedData.error);
       next(new ErrorHandler("Invalid input data", 400));
+      return;
+    }
+
+    if (!req.file) {
+      next(new ErrorHandler("Avatar is required", 400));
+      return;
+    }
+
+    const userExists = await prisma.user.findFirst({
+      where: {
+        email: parsedData.data.email,
+      },
+    });
+
+    if (userExists) {
+      next(new ErrorHandler("userExists with this email", 400));
       return;
     }
 
     const hashedPassword = await hashPassword(parsedData.data.password);
 
+    console.log("file", req.file);
+
+    const result = await uploadImageToCloudinary(req.file.buffer);
+    const data = await JSON.parse(result);
+    console.log(data);
+    const { url, id } = data;
+
     const user = await prisma.user.create({
       data: {
         name: parsedData.data.name,
         password: hashedPassword,
-        avatar: parsedData.data.avatar,
+        email: parsedData.data.email,
+        avatar: url,
+        publicId: id,
         bio: parsedData.data.bio,
       },
     });
-
-    res.status(200).json({ message: "user created successfully", id: user.id });
+    console.log("user", user);
+    res.status(200).json({
+      success: true,
+      message: "user created successfully",
+      id: user.id,
+    });
     return;
   }
 );
@@ -73,11 +107,11 @@ const loginHandler = TryCatch(
     }
 
     const token = await createToken(user.id);
-    
-    res.status(200)
-    .cookie("access_token", token, cookieOptions)
-    .json({
+
+    res.status(200).json({
+      success: true,
       message: "Login successful",
+      user,
       token,
     });
     return;

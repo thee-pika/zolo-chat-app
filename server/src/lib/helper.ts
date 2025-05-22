@@ -19,8 +19,8 @@ const findUserById = async (id: string) => {
   return otherUser;
 };
 
-const getSockets = (users: string[], userSocketIds: Map<string, string>) => {
-  const sockets = users.map((user) => userSocketIds.get(user.toString()));
+const getSockets = (users: [{id:string}], userSocketIds: Map<string, string>) => {
+  const sockets = users.map((user) => userSocketIds.get(user.id.toString()));
   return sockets;
 };
 

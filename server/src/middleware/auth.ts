@@ -7,8 +7,8 @@ config();
 
 const isAuthenticted = TryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies["access_token"];
-
+    const token = req.headers["authorization"]?.split(" ")[1];
+    console.log("token received !!", token);
     if (!token) {
       next(new ErrorHandler("token not found", 400));
       return;
