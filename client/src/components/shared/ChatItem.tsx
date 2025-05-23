@@ -5,53 +5,62 @@ interface MessageAlertType {
   count: number;
 }
 
+interface ChatT {
+  id: string;
+  name: string;
+  avatar: string;
+  groupChat: boolean;
+  members: string[];
+}
+
 interface ChatListProps {
   onlineUsers: string[];
   newMessagesAlert: MessageAlertType;
   handleDeleteChat: () => void;
-  avatar: string;
-  id: string;
-  name: string;
+
+  chat: ChatT;
+
   sameSender: string;
   isOnline: boolean;
   index: number;
 }
 
 const ChatItem: React.FC<ChatListProps> = ({
-  avatar,
-  name,
-  id,
   sameSender,
+  chat,
   isOnline,
   newMessagesAlert,
   handleDeleteChat,
 }) => {
-  const newMessageCount = newMessagesAlert?.chatId === id ? newMessagesAlert.count : 0;
+  const newMessageCount =
+    newMessagesAlert?.chatId === chat.id ? newMessagesAlert.count : 0;
 
+    console.log(sameSender);
   return (
     <div
-      className="flex items-center p-4 bg-white shadow rounded-lg hover:bg-gray-100 transition-all duration-300 cursor-pointer relative group"
-      title={`${name} ${newMessageCount > 0 ? `(${newMessageCount} new messages)` : ""}`}
+      className="flex border-b-2 items-center p-4 bg-white shadow rounded-lg hover:bg-gray-100 transition-all duration-300 cursor-pointer relative group"
+      title={`${chat.name} ${
+        newMessageCount > 0 ? `(${newMessageCount} new messages)` : ""
+      }`}
     >
-
       <div className="relative">
         <img
-          src={avatar}
-          alt={`${name}'s avatar`}
+          src={chat.avatar}
+          alt={`${chat.name}'s avatar`}
           className="w-12 h-12 rounded-full border border-gray-200"
         />
-  
+
         {isOnline && (
           <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
         )}
       </div>
 
       <div className="ml-4 flex-1">
-        <p className="font-medium text-gray-800">{name}</p>
+        <p className="font-medium text-gray-800">{chat.name}</p>
         <p className="text-sm text-gray-500">
           {newMessageCount > 0
             ? `${newMessageCount} new message${newMessageCount > 1 ? "s" : ""}`
-            : "No new messages"}
+            : ""}
         </p>
       </div>
 

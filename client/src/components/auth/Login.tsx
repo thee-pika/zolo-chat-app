@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { userExists } from "../../redux/reducers/auth";
@@ -9,8 +9,11 @@ interface LoginData {
   name: string;
   password: string;
 }
+
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [loginData, setLoginData] = useState<LoginData>({
     name: "",
     password: "",
@@ -19,23 +22,26 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login data", loginData);
-    console.log("Login form submitted");
+   
 
     const res = await axios.post(
       `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/login`,
       loginData
     );
 
-    console.log("res", res.data);
+    const redirectPath = location.state?.from?.pathname || "/";
+
     if (res.data.success) {
-      console.log("Dispatch function:", dispatch);
+
       localStorage.setItem("token", res.data.token);
       dispatch(userExists(res.data.user));
-      console.log("Login successful");
+
       toast.success(res.data.message ?? "Login successful");
+
+
       setTimeout(() => {
-        navigate("/chat");
+        navigate(redirectPath, { replace: true });
+        console.log("redirected ...");
       }, 1000);
     }
   };

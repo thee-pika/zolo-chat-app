@@ -7,35 +7,40 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { userExists, userNotExists } from "./redux/reducers/auth";
 
-const Home = lazy(() => import("./components/Home"));
+const Home = lazy(() => import("./pages/Home"));
 const Chat = lazy(() => import("./pages/Chat"));
 const Login = lazy(() => import("./components/auth/Login"));
 const Groups = lazy(() => import("./components/Groups"));
 const Signup = lazy(() => import("./components/auth/Signup"));
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  publicId: string;
+  bio: string;
+}
+
 function App() {
   const { user, loader } = useSelector(
-    (state: { auth: { user: boolean; loader: boolean } }) => state.auth
+    (state: { auth: { user: User; loader: boolean } }) => state.auth
   );
-  console.log("user", user);
-  console.log("loader", loader);
+
   const dispatch = useDispatch();
 
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (token) {
-      console.log("token found!!", token);
       getUserDetails(token);
     }
-    console.log("token notofund", token);
   }, [token]);
 
   const getUserDetails = async (token: string) => {
     try {
-      console.log("Fetching user data");
       const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/user`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,9 +48,7 @@ function App() {
         }
       );
 
-      console.log("fetchinggggggggggggggggggggggggggg res", res);
       if (res.data.success) {
-        console.log("User exists:", res.data.user);
         dispatch(userExists(res.data.user));
       }
     } catch (error) {
@@ -62,17 +65,11 @@ function App() {
         <Routes>
           <Route element={<ProtectedRoute user={user} />}>
             <Route path="/" element={<Home />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/groups" element={<Groups />} />
           </Route>
-
-          <Route element={<ProtectedRoute user={true} redirectUrl="/" />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </Route>
-
-          {/* <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} /> */}
+          <Route path="/chats/:chatId" element={<Chat user={user} />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/groups/:id" element={<Groups />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

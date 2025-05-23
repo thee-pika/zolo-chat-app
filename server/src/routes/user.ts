@@ -1,19 +1,24 @@
 import express from "express";
 import {
-  loginHandler,
-  logoutHandler,
-  signUpHandler,
+  acceptFriendRequest,
+  getAllNotifications,
+  getMyFriends,
+  searchUser,
+  sendFriendRequest,
   userDetails,
 } from "../controller/user";
 import { isAuthenticted } from "../middleware/auth";
-import { uploadSingle } from "../middleware/multer";
 
 export const userRouter = express();
 
-userRouter.post("/login", loginHandler);
+userRouter.get("/", isAuthenticted, userDetails);
 
-userRouter.post("/signup", uploadSingle, signUpHandler);
+userRouter.get("/search", searchUser);
 
-userRouter.get("/user", isAuthenticted, userDetails);
+userRouter.put("sendRequest", sendFriendRequest);
 
-userRouter.get("/logout", isAuthenticted, logoutHandler);
+userRouter.put("acceptRequest", acceptFriendRequest);
+
+userRouter.get("/notifications", getAllNotifications);
+
+userRouter.get("/friends", getMyFriends);

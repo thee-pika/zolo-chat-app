@@ -18,7 +18,7 @@ interface ChatListProps {
   chats: ChatT[];
   chatId: string;
   onlineUsers: string[];
-  newMessagesAlert: MessageAlertType;
+  newMessagesAlert: MessageAlertType[];
   handleDeleteChat: () => void;
 }
 
@@ -28,19 +28,16 @@ const ChatList: React.FC<ChatListProps> = ({
   onlineUsers = [],
   newMessagesAlert,
   handleDeleteChat,
-  
 }) => {
   console.log(chats);
   console.log(chatId);
   const sameSender = "";
-  const isOnline = false;
+  const isOnline = true;
   return (
     <>
       <div>
         {chats && chats.length > 0
           ? chats.map((data, index) => {
-              const { avatar, id, name, groupChat, members } = data;
-
               return (
                 <ChatItem
                   sameSender={sameSender}
@@ -48,11 +45,8 @@ const ChatList: React.FC<ChatListProps> = ({
                   newMessagesAlert={newMessagesAlert}
                   handleDeleteChat={handleDeleteChat}
                   onlineUsers={onlineUsers}
-                  avatar={avatar}
-                  groupChat={groupChat}
-                  name={name}
+                  chat={data}
                   index={index}
-                  id={id}
                 />
               );
             })

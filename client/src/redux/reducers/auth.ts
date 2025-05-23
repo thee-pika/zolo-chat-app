@@ -20,7 +20,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     userExists: (state, action) => {
-      console.log("Reducer triggered with payload:", action.payload);
       state.user = action.payload;
       state.loader = false;
     },

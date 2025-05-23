@@ -1,5 +1,5 @@
 import MenuIcon from "@mui/icons-material/Menu";
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import GroupIcon from "@mui/icons-material/Group";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
@@ -7,7 +7,6 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { Backdrop } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { userNotExists } from "../../redux/reducers/auth";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -65,7 +64,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="h-20 flex justify-between items-center px-8">
+      <div className="h-20 flex justify-between items-center px-8 border-b-2 shadow-md">
         <div className="font-bold text-3xl ml-4 shadow">
           Zolo Chat <span className="text-[#EF4444]">Messenger</span>
         </div>

@@ -17,7 +17,6 @@ import {
   REFETCH_CHATS,
 } from "../utils/event";
 import { findUserById, getOtherMember } from "../lib/helper";
-import { string } from "zod";
 
 const createGroupChat = TryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
