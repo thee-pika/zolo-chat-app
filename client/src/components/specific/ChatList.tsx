@@ -29,10 +29,9 @@ const ChatList: React.FC<ChatListProps> = ({
   newMessagesAlert,
   handleDeleteChat,
 }) => {
-  console.log(chats);
-  console.log(chatId);
-  const sameSender = "";
+  const sameSender = true;
   const isOnline = true;
+  console.log("onlineUsers", onlineUsers);
   return (
     <>
       <div>

@@ -3,11 +3,13 @@ import toast from "react-hot-toast";
 
 type ErrorObject = {
   isError: boolean;
-  error: {
-    data: {
-      message: string;
-    };
-  };
+  error:
+    | {
+        data: {
+          message: string;
+        };
+      }
+    | undefined;
   fallback?: () => void;
 };
 

@@ -19,8 +19,6 @@ const ProtectedRoute = ({
   redirectUrl?: string;
   user: User;
 }) => {
-  console.log("userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr", user);
-
   if (!user) {
     console.log(user);
     return <Navigate to={redirectUrl} />;

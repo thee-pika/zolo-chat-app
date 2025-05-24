@@ -2,15 +2,16 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense, useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
-import LayoutLoader from "./components/layout/Loaders";
+import { LayoutLoader } from "./components/layout/Loaders";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { userExists, userNotExists } from "./redux/reducers/auth";
+import { SocketProvider } from "./socket/socket";
 
 const Home = lazy(() => import("./pages/Home"));
 const Chat = lazy(() => import("./pages/Chat"));
 const Login = lazy(() => import("./components/auth/Login"));
-const Groups = lazy(() => import("./components/Groups"));
+const Groups = lazy(() => import("./pages/Groups"));
 const Signup = lazy(() => import("./components/auth/Signup"));
 
 interface User {
@@ -35,7 +36,8 @@ function App() {
     if (token) {
       getUserDetails(token);
     }
-  }, [token]);
+    console.log("loader ", loader);
+  }, [token, loader]);
 
   const getUserDetails = async (token: string) => {
     try {
@@ -63,13 +65,20 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<LayoutLoader />}>
         <Routes>
-          <Route element={<ProtectedRoute user={user} />}>
+          <Route
+            element={
+              <SocketProvider>
+                <ProtectedRoute user={user} />
+              </SocketProvider>
+            }
+          >
             <Route path="/" element={<Home />} />
+
+            <Route path="/groups/:id" element={<Groups />} />
           </Route>
           <Route path="/chats/:chatId" element={<Chat user={user} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/groups/:id" element={<Groups />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

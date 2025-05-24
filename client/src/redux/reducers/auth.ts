@@ -12,7 +12,7 @@ interface User {
 const initialState = {
   user: null as User | null,
   isAdmin: false,
-  loader: false,
+  loader: true,
 };
 
 const authSlice = createSlice({

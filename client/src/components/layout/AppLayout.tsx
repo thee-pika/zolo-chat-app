@@ -62,43 +62,50 @@ function AppLayout<P extends object>(WrappedComponent: ComponentType<P>) {
       (state: { misc: { isMobile: boolean } }) => state.misc
     );
 
-    const { user } = useSelector(
-      (state: { auth: { user: boolean; loader: boolean } }) => state.auth
-    );
-
     const { newMessagesAlert } = useSelector(
       (state: { chat: { newMessagesAlert: NewMessageAlertT[] } }) => state.chat
     );
 
-    const sampleChats = [
-      {
-        id: "1",
-        name: "John Doe",
-        avatar: "https://via.placeholder.com/150",
-        groupChat: false,
-        members: ["1", "2"],
-      },
-      {
-        id: "2",
-        name: "Jane Smith",
-        avatar: "https://via.placeholder.com/150",
-        groupChat: true,
-        members: ["2", "3", "4"],
-      },
-      {
-        id: "3",
-        name: "Dev Team",
-        avatar: "https://via.placeholder.com/150",
-        groupChat: true,
-        members: ["1", "2", "3", "4"],
-      },
-    ];
+    console.log("newMessagesAlert", newMessagesAlert);
+    // const sampleChats = [
+    //   {
+    //     id: "1",
+    //     name: "John Doe",
+    //     avatar: "https://via.placeholder.com/150",
+    //     groupChat: false,
+    //     members: ["1", "2"],
+    //   },
+    //   {
+    //     id: "2",
+    //     name: "Jane Smith",
+    //     avatar: "https://via.placeholder.com/150",
+    //     groupChat: true,
+    //     members: ["2", "3", "4"],
+    //   },
+    //   {
+    //     id: "3",
+    //     name: "Dev Team",
+    //     avatar: "https://via.placeholder.com/150",
+    //     groupChat: true,
+    //     members: ["1", "2", "3", "4"],
+    //   },
+    // ];
 
     // const onlineUsers = ["1", "3"];
     const deleteMenuAnchor = useRef<HTMLElement | null>(null);
     // const newMessagesAlert = { chatId, count: 5 };
     const { isLoading, data, isError, error, refetch } = useMyChatsQuery("");
-    console.log("chats data", data.chats);
+    if (!isLoading && data) {
+      console.log("Chats state in AppLayout:", chats);
+    }
+
+    useEffect(() => {
+      if (data) {
+        const validChats = data.chats.filter((chat: ChatT) => chat !== null);
+        console.log("validChats", validChats);
+        setChats(validChats);
+      }
+    }, [data]);
 
     useErrors([
       {
@@ -173,12 +180,7 @@ function AppLayout<P extends object>(WrappedComponent: ComponentType<P>) {
       [REFETCH_CHATS]: refetchListener,
       [ONLINE_USERS]: onlineUsersListener,
     };
-
-    // if (!socket) {
-    //   console.log("socket not found!");
-    //   return;
-    // }
-
+    console.log("socketsocketsocket", socket);
     useSocketEvents(socket!, eventHandlers);
 
     if (isLoading) {
@@ -196,7 +198,7 @@ function AppLayout<P extends object>(WrappedComponent: ComponentType<P>) {
     }
 
     return (
-      <div>
+      <>
         <Title />
         <Header />
         <DeleteChatMenu
@@ -208,7 +210,7 @@ function AppLayout<P extends object>(WrappedComponent: ComponentType<P>) {
         ) : (
           <Drawer open={isMobile} onClose={handleMobileClose}>
             <ChatList
-              chats={sampleChats}
+              chats={chats}
               chatId={chatId || "909090"}
               onlineUsers={onlineUsers}
               newMessagesAlert={newMessagesAlert}
@@ -217,14 +219,18 @@ function AppLayout<P extends object>(WrappedComponent: ComponentType<P>) {
           </Drawer>
         )}
         <div className="flex">
-          <div className=" w-1/4 h-[calc(100vh-80px)] sm:block hidden border-r-2">
-            <ChatList
-              chats={sampleChats}
-              chatId={chatId || "909090"}
-              onlineUsers={onlineUsers}
-              newMessagesAlert={newMessagesAlert}
-              handleDeleteChat={() => handleDeleteChat}
-            />
+          <div className=" w-1/4 min-h-[calc(100vh-80px)] sm:block hidden border-r-2">
+            {isLoading ? (
+              <Skeleton />
+            ) : (
+              <ChatList
+                chats={chats}
+                chatId={chatId || "9099999999999"}
+                handleDeleteChat={() => handleDeleteChat}
+                newMessagesAlert={newMessagesAlert}
+                onlineUsers={onlineUsers}
+              />
+            )}
           </div>
           <div className=" h-[calc(100vh-80px)] flex-1">
             <WrappedComponent {...props} />
@@ -233,7 +239,7 @@ function AppLayout<P extends object>(WrappedComponent: ComponentType<P>) {
             Third
           </div>
         </div>
-      </div>
+      </>
     );
   };
 }
